@@ -3,8 +3,10 @@
 
 [![OpenFOAM-v2406](https://img.shields.io/badge/OpenFOAM-2406-blue)](https://www.openfoam.com/news/main-news/openfoam-v24-06)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
+## Simulation using different solver
+### TwoliquidMixingFoam
 ![图片1](https://github.com/user-attachments/assets/988ac58f-a74f-41aa-ba20-ef9bb8aa9afc)
+### InterFoam
 
 
 
