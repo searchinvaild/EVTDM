@@ -1,0 +1,3 @@
+timeSlurryPower.C
+
+LIB = $(FOAM_LIBBIN)/libtimeSlurryPower

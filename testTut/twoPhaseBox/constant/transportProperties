@@ -1,0 +1,43 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+phases (grout water);
+grout
+{
+   
+
+    transportModel  easyTime;
+    k               1000;
+    n               2;
+
+
+    nu              1;
+    rho             1400;
+}
+
+water
+{
+    transportModel  Newtonian;
+    nu              1e-06;      // 水的运动黏度 m^2/s
+    rho             1000;       // 水的密度 kg/m^3
+}
+
+
+
+sigma           0.07;           // 表面张力系数 N/m
+
+// ************************************************************************* //

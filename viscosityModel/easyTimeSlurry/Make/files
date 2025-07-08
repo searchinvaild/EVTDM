@@ -1,0 +1,3 @@
+easyTime.C
+
+LIB = $(FOAM_LIBBIN)/libeasyTime

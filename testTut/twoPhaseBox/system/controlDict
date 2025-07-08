@@ -1,0 +1,185 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     interFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         10;
+
+deltaT          0.1;
+
+writeControl    adjustableRunTime;  // 关键！按运行时间对齐输出
+writeInterval   1;           // 固定输出间隔为 0.5 秒
+purgeWrite      0;              // 保留所有时间步
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  no;
+
+maxCo           0.7;
+maxAlphaCo      0.7;
+maxDeltaT       1;
+
+libs ("libtimeSlurry.so");
+libs ("libeasyTime.so");
+
+// system/controlDict
+
+
+functions
+{
+    // 散度计算器
+    calcDivPhi
+    {
+        type            div;
+        libs            ("libfieldFunctionObjects.so");
+        field           phi;
+        result          divPhi;       // 输出场名称
+        executeControl  timeStep;
+        writeControl    none;         // 禁用场文件写入
+        enabled         true;
+    }
+
+    // 连续性误差监测
+    continuityError
+    {
+    type            fieldMinMax;
+    libs            ("libfieldFunctionObjects.so");
+    fields          (divPhi);
+    executeControl  timeStep;
+    writeControl    timeStep;
+    log             true;
+    writeFields     false;  // 禁用场文件输出
+    csvOutput       true;   // 强制生成CSV
+    csvFile         "continuity_error.csv";  // 自定义文件名
+    csvSeparator    ",";
+    csvPrecision    12;
+    }
+
+  // 添加以下配置
+
+    // sludgeVolume
+    // {
+    //     type            volFieldValue;
+    //     libs            ("libfieldFunctionObjects.so");
+    //     writeControl    timeStep;
+    //     writeInterval   1;
+    //     log             true;
+    //     fields          (alpha.sludge);
+    //     operation       volIntegrate;  // 关键操作类型
+    //     writeFields     false;
+    //     regionType      all;
+    //     csvOutput       true;
+    //     csvFile         "sludge_volume.csv";
+    // }
+
+    // 求解器统计
+    solverStats
+    {
+        type            solverInfo;
+        libs            ("libutilityFunctionObjects.so");
+        fields          (p_rgh U alpha.grout);
+        executeControl  timeStep;
+        writeControl    timeStep;
+        writeOptions    { type csv; } // CSV格式输出
+    }
+
+
+    // inletPressure
+    // {
+    //     type            surfaceFieldValue;
+    //     libs            ("libfieldFunctionObjects.so");
+        
+    //     writeControl    timeStep;
+    //     writeInterval   10;
+        
+    //     log             yes;
+    //     writeFields     no;
+        
+    //     regionType      patch;
+    //     name            inlet;
+        
+    //     operation       average;  // 可选: average, sum, weightedAverage, areaAverage, areaIntegrate
+        
+    //     fields
+    //     (
+    //         p
+    //     );
+    // }
+    // linePressure
+    // {
+    //     type            sets;
+    //     libs            ("libsampling.so");
+        
+    //     writeControl    runTime;
+    //     writeInterval   60;
+        
+    //     setFormat       raw;
+    //     interpolationScheme cellPoint;
+        
+    //     fields (p p_rgh);
+        
+    //     sets
+    //     (
+    //         centerLine
+    //         {
+    //             type    uniform;
+    //             axis    x;
+    //             start   (0 0.0025 0.0005);      // 中心线
+    //             end     (1.5 0.0025 0.0005);
+    //             nPoints 100;
+    //         }
+            
+    //         bottomLine
+    //         {
+    //             type    uniform;
+    //             axis    x;
+    //             start   (0 0 0.0005);           // 底部线
+    //             end     (1.5 0 0.0005);
+    //             nPoints 100;
+    //         }
+            
+    //         topLine
+    //         {
+    //             type    uniform;
+    //             axis    x;
+    //             start   (0 0.005 0.0005);       // 顶部线
+    //             end     (1.5 0.005 0.0005);
+    //             nPoints 100;
+    //         }
+    //     );
+    // }
+
+}
+
+
+
+// ************************************************************************* //
