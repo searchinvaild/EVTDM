@@ -8,7 +8,6 @@
 ![图片1](https://github.com/user-attachments/assets/988ac58f-a74f-41aa-ba20-ef9bb8aa9afc)
 ### InterFoam
 ![InterFoam_nobag](https://github.com/user-attachments/assets/534a8b8d-63a0-4966-863e-a1cc4dfc2024)
-### InterFoam_Dambreak
 ![damBreak foam](https://github.com/user-attachments/assets/0bf23f08-4f3d-4413-8eb1-c21638d2f8e2)
 
 
@@ -97,18 +96,7 @@ We welcome contributions through:
 - Validation case additions  
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
-## Citation
-If used in academic work, please cite:
-```bibtex
-@software{YourName_2024_timeSlurryPower,
-  author = {Your Name},
-  title = {timeSlurryPower: A Time-dependent Non-Newtonian Model for Grout Migration},
-  year = {2024},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/yourusername/timeSlurryPower}}
-}
-```
+
 
 ## License
 GNU GPLv3 © 2024 Your Name  
