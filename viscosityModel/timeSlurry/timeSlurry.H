@@ -25,24 +25,18 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::viscosityModels::easyTime
+    Foam::viscosityModels::timeSlurry
 
 Description
-    Time-dependent viscosity model with simple power law:
-    nu = max(VSMALL, k*t^n)
-    
-    where:
-    - k = consistency coefficient
-    - t = simulation time
-    - n = power law index
+     Herschel-Bulkley non-Newtonian viscosity model.
 
 SourceFiles
-    easyTime.C
+    timeSlurry.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef easyTime_H
-#define easyTime_H
+#ifndef timeSlurry_H
+#define timeSlurry_H
 
 #include "viscosityModel.H"
 #include "dimensionedScalar.H"
@@ -56,44 +50,44 @@ namespace viscosityModels
 {
 
 /*---------------------------------------------------------------------------*\
-                           Class easyTime Declaration
+                           Class timeSlurry Declaration
 \*---------------------------------------------------------------------------*/
 
-class easyTime
+class timeSlurry
 :
     public viscosityModel
 {
     // Private data
 
-        dictionary easyTimeCoeffs_;
+        dictionary timeSlurryCoeffs_;
 
         dimensionedScalar k_;
         dimensionedScalar n_;
-
-
-protected:
-
-    // Protected data
-
+        dimensionedScalar tau0_;
+        dimensionedScalar nuMax_;
+        dimensionedScalar timeCoeff_;
         volScalarField nu_;
-
-
-    // Protected Member Functions
-
-        //- Calculate and return the laminar viscosity
         tmp<volScalarField> calcNu() const;
 
+    // Debug fields
+        mutable volScalarField Debug1_;
+        mutable volScalarField Debug2_;
+        mutable bool needsUpdate_;  // 添加更新标志
+protected:
+    mutable volScalarField nu_;  // 添加 mutable
+
+    
 
 public:
 
     //- Runtime type information
-    TypeName("easyTime");
+    TypeName("timeSlurry");
 
 
     // Constructors
 
         //- Construct from components
-        easyTime
+        timeSlurry
         (
             const word& name,
             const dictionary& viscosityProperties,
@@ -103,7 +97,7 @@ public:
 
 
     //- Destructor
-    virtual ~easyTime() = default;
+    virtual ~timeSlurry() = default;
 
 
     // Member Functions
@@ -111,7 +105,8 @@ public:
         //- Return the laminar viscosity
         virtual tmp<volScalarField> nu() const
         {
-            return nu_;
+        const_cast<timeSlurry*>(this)->correct();
+        return nu_;
         }
 
         //- Return the laminar viscosity for patch
@@ -121,11 +116,11 @@ public:
         }
 
         //- Correct the laminar viscosity
-        virtual void correct()
-        {
-            nu_ = calcNu();
-        }
-
+        // virtual void correct()
+        // {
+        //     nu_ = calcNu();
+        // }
+        virtual void correct();
         //- Read transportProperties dictionary
         virtual bool read(const dictionary& viscosityProperties);
 };

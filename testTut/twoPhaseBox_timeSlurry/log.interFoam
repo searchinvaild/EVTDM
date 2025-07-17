@@ -1,0 +1,71 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _630d60de3b-20240620 OPENFOAM=2406 version=v2406
+Arch   : "LSB;label=32;scalar=64"
+Exec   : interFoam
+Date   : Jul 17 2025
+Time   : 14:59:46
+Host   : piaopc
+PID    : 7204
+I/O    : uncollated
+Case   : /mnt/g/Github/EVTDM/testTut/twoPhaseBox_timeSlurry
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+
+PIMPLE: Operating solver in PISO mode
+
+Reading field p_rgh
+
+Reading field U
+
+Reading/calculating face flux field phi
+
+Reading transportProperties
+
+Selecting incompressible transport model timeVaryingGrout1
+
+
+--> FOAM FATAL IO ERROR: (openfoam-2406)
+Unknown viscosityModel type timeVaryingGrout1
+
+Valid viscosityModel types :
+
+13
+(
+ArrheniusBirdCarreau
+ArrheniusCasson
+ArrheniusCrossPowerLaw
+ArrheniusHerschelBulkley
+ArrheniusNewtonian
+BirdCarreau
+Casson
+CrossPowerLaw
+HerschelBulkley
+Newtonian
+powerLaw
+strainRateFunction
+timeVaryingGrout
+)
+
+
+
+file: constant/transportProperties/grout at line 22 to 36.
+
+    From static Foam::autoPtr<Foam::viscosityModel> Foam::viscosityModel::New(const Foam::word&, const Foam::dictionary&, const volVectorField&, const surfaceScalarField&)
+    in file viscosityModels/viscosityModel/viscosityModelNew.C at line 51.
+
+FOAM exiting
+

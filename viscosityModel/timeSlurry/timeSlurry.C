@@ -75,6 +75,7 @@ Foam::viscosityModels::timeSlurry::calcNu() const // calcNu()是函数名，前�
 }
 
 
+
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 Foam::viscosityModels::timeSlurry::timeSlurry
@@ -95,11 +96,38 @@ Foam::viscosityModels::timeSlurry::timeSlurry
     tau0_("tau0", dimViscosity/dimTime, timeSlurryCoeffs_),
     nuMax_("nuMax", dimViscosity, timeSlurryCoeffs_),
     timeCoeff_("timeCoeff", dimless, timeSlurryCoeffs_),
+     needsUpdate_(true),
+    Debug1_
+    (
+        IOobject
+        (
+            "grout_Debug1",  // 使用固定名称
+            U_.time().timeName(),
+            U_.db(),
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        U_.mesh(),
+        dimensionedScalar("zero", dimless/dimTime, 0.0)
+    ),
+    Debug2_
+    (
+        IOobject
+        (
+            "grout_Debug2",  // 使用固定名称
+            U_.time().timeName(),
+            U_.db(),
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        U_.mesh(),
+        dimensionedScalar("zero", dimViscosity, 0.0)
+    ),
     nu_
     (
         IOobject
         (
-            name,  // 强制指定字段名称（原name参数）
+            name,
             U_.time().timeName(),
             U_.db(),
             IOobject::NO_READ,
@@ -107,7 +135,9 @@ Foam::viscosityModels::timeSlurry::timeSlurry
         ),
         calcNu()
     )
-{}
+{
+    Info<< "timeSlurry constructor called for phase: " << name << endl;
+}
 
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //

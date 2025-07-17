@@ -1,0 +1,96 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+
+castellatedMesh on;
+snap            on;
+addLayers       on;
+
+geometry
+{
+    cylinder
+    {
+        type searchableCylinder;
+        point1 (11.5 0 -0.1);
+        point2 (11.5 0 0.1);
+        radius 1.5;
+    }
+};
+
+castellatedMeshControls  //网格细化设置
+{
+    features //定义需要保留的特征，例如边缘和角点等
+    (
+      
+    );
+
+    refinementSurfaces //定义了在几何体表面上的网格细化设置
+    {
+        cylinder  //表面细化区域的名称，可以根据具体的几何体命名
+        {
+            level (2 3);  //定义了在这个表面上的细化等级，最小和最大细化等级均为3
+            patchInfo { type wall; } //为这个表面定义一个补丁信息，类型为 wall（壁面）
+        }
+    }
+
+    refinementRegions  //特定区域内的网格细化设置  这里不需要
+    {
+        /*cylinder
+        {
+            mode    inside;
+            level   2;
+        }*/
+    }
+
+    locationInMesh (3 0.5 0.05); //规定切割内部还是外部
+}
+
+snapControls
+{
+    explicitFeatureSnap      false;  //显示贴合  //外部导入slt、obj文件用这个
+    implicitFeatureSnap      true;//隐·贴合  //系统命令生成用这个
+}
+
+addLayersControls
+{
+    layers
+    {
+       // "CAD.*" 表示是cad生成外部文件
+       cylinder //这里给自己建的几何加边界层
+        {
+            nSurfaceLayers 4;
+        }
+    }
+
+    relativeSizes       true; //这个参数指定是否使用相对尺寸来定义边界层厚度。如果设置为 true，则边界层厚度是相对于网格尺寸的
+    expansionRatio      1.2; //定义每一层边界层的膨胀比率。这里设置为 1.2，表示每一层的厚度是前一层的 1.2 倍。
+    finalLayerThickness 0.5; //定义最后一层边界层的相对厚度。如果 relativeSizes 为 true，这个值是相对于总厚度的
+    minThickness        1e-3; //定义边界层的最小厚度。即使在较小的区域，边界层的厚度也不会小于这个值。
+}
+
+meshQualityControls  //默认不管
+{}
+
+writeFlags
+(
+    // scalarLevels
+    // layerSets
+    // layerFields
+);
+
+mergeTolerance 1e-6; //control里的 timePrecision   6;这里指数幂就是小于6
+
+// ************************************************************************* //

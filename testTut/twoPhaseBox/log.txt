@@ -1,1 +1,0 @@
-Running interFoam on /mnt/g/Github/EVTDM/testTut/twoPhaseBox

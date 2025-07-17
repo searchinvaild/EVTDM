@@ -1,0 +1,48 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+phases (grout water);
+
+grout
+{
+    transportModel  timeVaryingGrout1;
+    
+    timeVaryingGroutCoeffs
+    {
+        k               0.4172;
+        n               0.8751;
+        tau0            50;
+        nuMax           1;
+        timeCoeff       0.0009;
+        regularization  Papanastasiou;
+        
+
+    }
+    
+    rho             1400;
+}
+
+water
+{
+    transportModel  Newtonian;
+    nu              1e-06;
+    rho             1000;
+}
+
+sigma           0.07;
+
+// ************************************************************************* //

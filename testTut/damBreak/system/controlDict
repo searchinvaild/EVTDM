@@ -54,6 +54,9 @@ maxAlphaCo      1;
 maxDeltaT       1;
 
 
-libs ("libtimeSlurryPower.so");
+libs
+(
+    "libtimeVaryingGroutViscosityModel.so"
+);
 
 // ************************************************************************* //

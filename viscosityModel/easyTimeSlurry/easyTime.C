@@ -83,12 +83,11 @@ void Foam::viscosityModels::easyTime::correct()
     // 获取 alpha1 场
     const volScalarField& alpha1 = U_.mesh().lookupObject<volScalarField>("alpha.grout");
     
-   nu_ = calcNu();
-    
-    // 强制 nuDebug_ 为非均匀场
+    nu_ = calcNu();
+    nuDebug2_ = alpha1;  // 添加调试场2：alpha1场
+  
     nuDebug_ = nu_;
     
-    // 添加一个小的扰动来强制非均匀输出（仅用于调试）
     forAll(nuDebug_, celli)
     {
         nuDebug_[celli] = nu_[celli] * alpha1[celli];
@@ -121,22 +120,34 @@ Foam::viscosityModels::easyTime::easyTime
             U_.time().timeName(),
             U_.db(),
             IOobject::NO_READ,
-            IOobject::NO_WRITE  // 改为 NO_WRITE
+            IOobject::AUTO_WRITE  // 改为 NO_WRITE不写入时间步
         ),
         calcNu()
     ),
-    nuDebug_  // 添加调试场
+    nuDebug_  // 添加调试场1：nu_field=alpha.grout*calcNu();
     (
         IOobject
         (
-            name + "_field",  // 例如 "nu1_field"
+            name + "_field1",  // 例如 "nu1_field"
             U_.time().timeName(),
             U_.db(),
             IOobject::NO_READ,
             IOobject::AUTO_WRITE
         ),
         nu_
-    )
+    ),
+    nuDebug2_  // 修正：直接查找或使用占位符
+    (
+        IOobject
+        (
+            name + "alpha1",
+            U_.time().timeName(),
+            U_.db(),
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        U_.mesh().lookupObject<volScalarField>("alpha.grout") // 方法2
+    ) 
     
 {}
 

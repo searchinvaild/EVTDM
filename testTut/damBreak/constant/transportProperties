@@ -19,7 +19,7 @@ phases          (water air);
 water
 {
 
-    transportModel  timeSlurryPower;
+    transportModel  timeVaryingGrout;
     k               3.009643e-6;
     n               0.9118;
     tau0            0.00001785;

@@ -1,0 +1,64 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+# settings
+
+    # flag to enable computations in parallel mode
+    parallel= false
+
+
+#------------------------------------------------------------------------------
+
+restoreconstantDir  #相当于把0.orig名字重命名为0
+
+
+#[ -d constant/polyMesh ] || cp -rf constant/polyMesh.orig constant/polyMesh   #相当于把/polyMesh文件夹拷贝到constant文件夹下
+
+# 修改后的 allrun 脚本关键部分
+if [ "$parallel" = true ]
+then
+    rm -rf processor*  # 添加此行：清理旧处理器目录
+    runApplication blockMesh
+    runApplication topoSet
+    #runApplication setFields
+    runApplication createPatch -overwrite
+    runApplication decomposePar  #相当于命令行运行decomposePar
+    runParallel $(getApplication) #相当于命令行运行simpleFoam
+    runApplication reconstructPar #相当于命令行运行reconstructPar
+else
+runApplication blockMesh
+#runApplication snappyHexMesh -overwrite
+#runApplication topoSet
+#runApplication createPatch -overwrite
+#runApplication createBaffles -overwrite
+runApplication setFields 
+#runApplication decomposePar
+#runApplication mpiexec -n 8 interFoam -parallel
+runApplication interFoam | tee log.txt
+#runApplication residuals
+#runApplication pimpleResiduals
+#runApplication continuity
+#runApplication writeCellCentres
+#runApplication writeCellVolumes
+
+#runApplication reconstructPar
+fi
+
+
+#------------------------------------------------------------------------------
+
+
+#runApplication blockMesh
+##runApplication snappyHexMesh 
+#runApplication topoSet
+#runApplication createPatch -overwrite
+#runApplication createBaffles -overwrite
+#runApplication setFields
+#runApplication decomposePar
+#runApplication mpiexec -n 8 interFoam -parallel
+#runApplication interFoam
+#runApplication reconstructPar
+
+#------------------------------------------------------------------------------

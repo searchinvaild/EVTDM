@@ -22,6 +22,7 @@ class easyTime
     
     // 如果需要调试场
     mutable volScalarField nuDebug_;
+    mutable volScalarField nuDebug2_;
 
     // Private Member Functions
     tmp<volScalarField> calcNu() const;
