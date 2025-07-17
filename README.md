@@ -96,18 +96,7 @@ We welcome contributions through:
 - Validation case additions  
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
-## Citation
-If used in academic work, please cite:
-```bibtex
-@software{YourName_2024_timeSlurryPower,
-  author = {Your Name},
-  title = {timeSlurryPower: A Time-dependent Non-Newtonian Model for Grout Migration},
-  year = {2024},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/yourusername/timeSlurryPower}}
-}
-```
+
 
 ## License
 GNU GPLv3 © 2024 Your Name  
